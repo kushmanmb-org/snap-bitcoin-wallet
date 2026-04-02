@@ -309,11 +309,10 @@ describe('error classes', () => {
         new AssertionError(''), // 9000
       ];
 
-      for (let i = 0; i < expectedOrder.length - 1; i++) {
-        expect(expectedOrder[i]?.code).toBeLessThan(
-          expectedOrder[i + 1]?.code ?? 0,
-        );
-      }
+      // Verify codes are in ascending order by checking sorted equals original
+      const codes = expectedOrder.map((error) => error.code);
+      const sortedCodes = [...codes].sort((a, b) => a - b);
+      expect(codes).toStrictEqual(sortedCodes);
     });
   });
 });

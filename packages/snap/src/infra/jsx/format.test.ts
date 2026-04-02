@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-import type { Network } from '@metamask/bitcoindevkit';
-
-import { CurrencyUnit } from '../../entities';
 import {
   exchangeAmount,
   displayExchangeAmount,
@@ -14,15 +10,12 @@ import {
   displayNetwork,
 } from './format';
 
-// Mock only specific parts of the module
+// Mock only specific parts of the module that are needed
 jest.mock('@metamask/bitcoindevkit', () => ({
   BdkErrorCode: {
     0: 'InsufficientFunds',
     1: 'InvalidAddress',
     100: undefined,
-  },
-  Amount: {
-    from_sat: jest.fn(),
   },
 }));
 
@@ -90,22 +83,22 @@ describe('format utilities', () => {
         greeting: { message: 'Hello, World!' },
         farewell: { message: 'Goodbye!' },
       };
-      const t = translate(messages);
+      const translator = translate(messages);
 
-      expect(t('greeting')).toBe('Hello, World!');
-      expect(t('farewell')).toBe('Goodbye!');
+      expect(translator('greeting')).toBe('Hello, World!');
+      expect(translator('farewell')).toBe('Goodbye!');
     });
 
     it('returns placeholder for missing key', () => {
       const messages = {};
-      const t = translate(messages);
+      const translator = translate(messages);
 
-      expect(t('nonexistent')).toBe('{nonexistent}');
+      expect(translator('nonexistent')).toBe('{nonexistent}');
     });
 
     it('handles empty messages object', () => {
-      const t = translate({});
-      expect(t('test')).toBe('{test}');
+      const translator = translate({});
+      expect(translator('test')).toBe('{test}');
     });
   });
 
@@ -151,6 +144,7 @@ describe('format utilities', () => {
     });
 
     it('returns false for javascript protocol', () => {
+      // eslint-disable-next-line no-script-url
       expect(isValidSnapLinkProtocol('javascript:alert(1)')).toBe(false);
     });
 

@@ -41,16 +41,13 @@ describe('parsers', () => {
         throw error;
       });
 
-      try {
-        parsePsbt('bad-psbt-data');
-        fail('Expected FormatError to be thrown');
-      } catch (err) {
-        expect(err).toBeInstanceOf(FormatError);
-        const formatError = err as FormatError;
-        expect(formatError.message).toBe('Invalid PSBT');
-        expect(formatError.data).toStrictEqual({ transaction: 'bad-psbt-data' });
-        expect(formatError.cause).toBe(error);
-      }
+      expect(() => parsePsbt('bad-psbt-data')).toThrow(
+        expect.objectContaining({
+          message: 'Invalid PSBT',
+          data: { transaction: 'bad-psbt-data' },
+          cause: error,
+        }),
+      );
     });
 
     it('handles empty string', () => {

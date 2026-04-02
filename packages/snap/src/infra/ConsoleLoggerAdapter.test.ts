@@ -9,11 +9,11 @@ describe('ConsoleLoggerAdapter', () => {
   let consoleTraceSpy: jest.SpyInstance;
 
   beforeEach(() => {
-    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
-    consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation(() => {});
-    consoleDebugSpy = jest.spyOn(console, 'debug').mockImplementation(() => {});
-    consoleTraceSpy = jest.spyOn(console, 'trace').mockImplementation(() => {});
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
+    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+    consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
+    consoleDebugSpy = jest.spyOn(console, 'debug').mockImplementation();
+    consoleTraceSpy = jest.spyOn(console, 'trace').mockImplementation();
   });
 
   afterEach(() => {
@@ -132,15 +132,15 @@ describe('ConsoleLoggerAdapter', () => {
     it('passes multiple arguments to console methods', () => {
       const logger = new ConsoleLoggerAdapter(LogLevel.TRACE);
       const obj = { key: 'value' };
-      const err = new Error('test error');
+      const testError = new Error('test error');
 
-      logger.error('error:', obj, err);
+      logger.error('error:', obj, testError);
       logger.warn('warn:', obj, 123);
       logger.info('info:', obj, true);
       logger.debug('debug:', obj, [1, 2, 3]);
       logger.trace('trace:', obj, null);
 
-      expect(consoleErrorSpy).toHaveBeenCalledWith('error:', obj, err);
+      expect(consoleErrorSpy).toHaveBeenCalledWith('error:', obj, testError);
       expect(consoleWarnSpy).toHaveBeenCalledWith('warn:', obj, 123);
       expect(consoleInfoSpy).toHaveBeenCalledWith('info:', obj, true);
       expect(consoleDebugSpy).toHaveBeenCalledWith('debug:', obj, [1, 2, 3]);
